@@ -1,30 +1,48 @@
 package pl.edu.agh.mwo.invoice;
 
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
-    private Collection<Product> products;
-
+    private Map<Product, Integer> products = new LinkedHashMap<>();
+	
     public void addProduct(Product product) {
-        // TODO: implement
+    	this.addProduct(product, 1);
     }
 
     public void addProduct(Product product, Integer quantity) {
-        // TODO: implement
+    	 if (quantity <=0 ) {
+         	throw new IllegalArgumentException("Name cannot be null or empty");
+         }
+    	this.products.put(product, quantity);
     }
 
-    public BigDecimal getSubtotal() {
-        return null;
+    public BigDecimal getNetPrice() {
+        BigDecimal netPrice = BigDecimal.ZERO;
+        
+        for(Product product: this.products.keySet()) {
+        	 Integer quantity = this.products.get(product);
+        	 netPrice = netPrice.add(new BigDecimal(quantity).multiply(product.getPrice())) ;
+        }
+        return netPrice;
     }
 
     public BigDecimal getTax() {
-        return null;
+    	 BigDecimal tax = BigDecimal.ZERO; 
+         tax = this.getGrossPrice().subtract(getNetPrice());
+         return tax;
     }
-
-    public BigDecimal getTotal() {
-        return null;
+    
+    public BigDecimal getGrossPrice() {
+    	BigDecimal grossPrice = BigDecimal.ZERO;
+        
+        for(Product product: this.products.keySet()) {
+        	 Integer quantity = this.products.get(product);
+        	 grossPrice= grossPrice.add(new BigDecimal(quantity).multiply(product.getPriceWithTax())) ;
+        }
+        return grossPrice;
     }
 }
