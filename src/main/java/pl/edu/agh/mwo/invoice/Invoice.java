@@ -3,9 +3,12 @@ package pl.edu.agh.mwo.invoice;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
+<<<<<<< HEAD
 
 import javax.swing.table.TableStringConverter;
 
+=======
+>>>>>>> 1ad003ded20215f520d686b849395ebc83311a31
 import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
