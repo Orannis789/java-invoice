@@ -129,4 +129,31 @@ public class InvoiceTest {
         int number2 = new Invoice().getNumber();
         Assert.assertThat(number1, Matchers.lessThan(number2));
     }
+    
+    @Test
+    public void testHowManyLinesPrinted() {
+        String[] lines = invoice.printInvoiceToSting().split("\n");
+        Assert.assertEquals(invoice.getProducts().size()+3, lines.length);
+    }
+    
+    @Test
+    public void testIsInvoiceNumberPrinted() {
+        String[] lines = invoice.printInvoiceToSting().split("\n");
+        Assert.assertEquals("Invoice number: "+ invoice.getNumber(), lines[0]);
+    }
+    
+    @Test
+    public void testIsNumberOfItemsPrinted() {
+        String[] lines = invoice.printInvoiceToSting().split("\n");
+        Assert.assertEquals("Number of items: " + invoice.getProducts().size(), lines[lines.length-1]);
+    }
+    
+    @Test
+    public void testQuantityOfProductWithTheSameName() {
+        DairyProduct koziSerek = new DairyProduct("Kozi Serek", new BigDecimal("10"));
+        invoice.addProduct(koziSerek, 3);
+        invoice.addProduct(koziSerek, 3);
+        Assert.assertThat(invoice.getProducts().get(koziSerek),Matchers.equalTo(6));
+    }
+    
 }
