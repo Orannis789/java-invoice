@@ -99,6 +99,11 @@ public class InvoiceTest {
     public void testInvoiceWithZeroQuantity() {
         invoice.addProduct(new TaxFreeProduct("Tablet", new BigDecimal("1678")), 0);
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvoiceWithNoProducts() {
+        invoice.addProduct(null , 5);
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvoiceWithNegativeQuantity() {
@@ -146,6 +151,16 @@ public class InvoiceTest {
     public void testIsNumberOfItemsPrinted() {
         String[] lines = invoice.printInvoiceToSting().split("\n");
         Assert.assertEquals("Number of items: " + invoice.getProducts().size(), lines[lines.length-1]);
+    }
+
+    @Test
+    public void testIsProductCountPricePrinted() {
+        DairyProduct mleko = new DairyProduct("mleko", new BigDecimal("10"));
+        invoice.addProduct(mleko, 3);
+        String[] lines = invoice.printInvoiceToSting().split("\n");
+        Assert.assertEquals(String.format("%-20s", mleko.getName())
+                + String.format("%-5s", invoice.getProducts().get(mleko))
+                + String.format("%-15s", mleko.getPriceWithTax()), lines[2]);
     }
     
     @Test
